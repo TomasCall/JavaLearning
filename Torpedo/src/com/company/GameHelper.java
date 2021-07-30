@@ -1,45 +1,38 @@
 package com.company;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class GameHelper {
 
     //Data Members
-    ArrayList<DotCom> dotComs = new ArrayList<>();
+    ArrayList<DotCom> dotComs;
+    ArrayList<String> pointsAlready;
     //Contructor
+
     public GameHelper()
     {
-        System.out.println("Give me the name of the first company!");
+        dotComs=new ArrayList<>();
+        pointsAlready=new ArrayList<>();
         for (int i = 0; i < 3; i++) {
+            System.out.println("Give me the name of the company!");
             String name = UserInput();
-            DotCom dc = new DotCom(name,i%2==1);
+            DotCom dc = new DotCom(name,i%2==1,pointsAlready);
             dotComs.add(dc);
         }
     }
+
+
     //Methods
     public String UserInput()
     {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        //System.out.print("Give me a point! ");
-        try {
-            return reader.readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return"bipbup";
+        Scanner sc = new Scanner(System.in);
+        String input = sc.nextLine();
+        return  input;
     }
     public void Start()
     {
 
-        /*
-        for (int i = 0; i < dotComOne.getPoints().size(); i++) {
-            System.out.println(dotComOne.getPoints().get(i));
-        }
-
-         */
         while (dotComs.size()!=0)
         {
             System.out.println("Give me a point! ");
@@ -55,6 +48,5 @@ public class GameHelper {
                 }
             }
         }
-        //System.out.println("You sank the ships of "+dotComOne.getName());
     }
 }

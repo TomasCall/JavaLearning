@@ -10,16 +10,8 @@ public class DotCom {
         return countOfHits;
     }
 
-    public void setCountOfHits(byte countOfHits) {
-        this.countOfHits = countOfHits;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public ArrayList<String> getPoints() {
@@ -33,13 +25,52 @@ public class DotCom {
     private String[] cols;
     private String[] rows;
     //Constructors
-    public DotCom(String name,Boolean lying)
+    public DotCom(String name,Boolean lying,ArrayList<String> pointsAlready)
     {
+        cols= new String[]{"A", "B", "C", "D", "E", "F", "G"};
+        rows= new String[]{"1", "2", "3", "4", "5", "6", "7"};
         points=new ArrayList<>();
         Random rnd=new Random();
         this.name=name;
-        cols= new String[]{"A", "B", "C", "D", "E", "F", "G"};
-        rows= new String[]{"1", "2", "3", "4", "5", "6", "7"};
+        GeneratePoints(lying);
+        if (pointsAlready.size()==0)
+        {
+            for (int i = 0; i < points.size(); i++) {
+                pointsAlready.add(points.get(i));
+            }
+        }
+        else
+        {
+            while (CheckPoints(pointsAlready))
+            {
+                points.clear();
+                GeneratePoints(lying);
+            }
+            for (int i = 0; i < points.size(); i++) {
+                pointsAlready.add(points.get(i));
+            }
+        }
+    }
+
+    public boolean Checker(String input)
+    {
+        for (int i = 0; i < points.size(); i++) {
+            StringBuilder tmp = new StringBuilder();
+            tmp.append(points.get(i));
+            tmp.reverse();
+            if (input.equals(points.get(i)) || input.equals(tmp.toString()) || input.equals(points.get(i).toLowerCase(Locale.ROOT)) || input.equals(tmp.toString().toLowerCase(Locale.ROOT)))
+            {
+                System.out.println("You hit it!");
+                points.remove(i);
+                countOfHits++;
+                return true;
+            }
+        }
+        return  false;
+    }
+    public void GeneratePoints(Boolean lying)
+    {
+        Random rnd=new Random();
         int row,col;
         if (lying)
         {
@@ -57,24 +88,15 @@ public class DotCom {
             points.add(rows[row+1]+cols[col]);
             points.add(rows[row+2]+cols[col]);
         }
-
     }
-
-    public boolean Checker(String input)
+    public Boolean CheckPoints(ArrayList<String> pointsAlready)
     {
         for (int i = 0; i < points.size(); i++) {
-            StringBuilder tmp = new StringBuilder();
-            tmp.append(points.get(i));
-            tmp.reverse();
-            System.out.println(tmp.toString().toLowerCase(Locale.ROOT));
-            if (input.equals(points.get(i)) || input.equals(tmp.toString()) || input.equals(points.get(i).toLowerCase(Locale.ROOT)) || input.equals(tmp.toString().toLowerCase(Locale.ROOT)))
+            if (pointsAlready.contains(points.get(i)))
             {
-                System.out.println("You hit it!");
-                points.remove(i);
-                countOfHits++;
                 return true;
             }
         }
-        return  false;
+        return false;
     }
 }
